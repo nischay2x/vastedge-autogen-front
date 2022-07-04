@@ -8,6 +8,11 @@ export const getTables = (pageName) => {
     : axios.get(baseUrl + '/dataset/tables');
 } 
 
+export const getDesignerColumns = (pageName) => {
+    if(pageName) return axios.get(baseUrl + "/designer/columns?pageName=" + pageName);
+    else return axios.get(baseUrl + "/designer/columns");
+} 
+
 export const getDesignerColumnsByTableName = (tableName, pageName) => {
     return pageName ? axios.get(baseUrl + '/designer/columns/' + tableName + '?pageName=' + pageName) 
     : axios.get(baseUrl + '/designer/columns/' + tableName);

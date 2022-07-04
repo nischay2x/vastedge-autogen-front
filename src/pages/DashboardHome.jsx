@@ -32,6 +32,7 @@ export default function DashboardHome() {
     const [tableIsMaster, setTableIsMaster] = useState(true);
 
     const [designerColumns, setDesignerColumns] = useState([]);
+    const [showTable, setShowTable] = useState(false);
     const [designerColumnData, setDesignerColumnData] = useState(defaultDesignerData)
     const [crudColumns, setCrudColumns] = useState([]);
     const [currentDatasetColumn, setCurrentDatasetColumn] = useState({
@@ -59,7 +60,8 @@ export default function DashboardHome() {
 
     const applyDesignerColumnResponse = (res) => {
         const columnsData = res.data.data;
-        setDesignerColumns(columnsData)
+        setDesignerColumns(columnsData);
+        setShowTable(true);
         if (columnsData.length) {
             setTableIsMaster(columnsData[0].isMaster);
             if(columnsData[0].pageName === pageName) setTableTypeDisabled(true);
@@ -70,11 +72,16 @@ export default function DashboardHome() {
     }
 
     useEffect(() => {
+        let isNewPage = pageName && !pageList.includes(pageName);
         setIsNewEntry(prev => (
-            { ...prev, pageName: pageName && !pageList.includes(pageName) }
+            { ...prev, pageName: isNewPage }
         ));
-        if(designerColumns[0]?.pageName === pageName) setTableTypeDisabled(true);
-        else setTableTypeDisabled(false);
+        if(isNewPage) setShowTable(false);
+        else {
+            setShowTable(true);
+            if(designerColumns[0]?.pageName === pageName) setTableTypeDisabled(true);
+            else setTableTypeDisabled(false);
+        }
     }, [pageName]);
 
     useEffect(() => {
@@ -211,7 +218,7 @@ export default function DashboardHome() {
                 <h3 className="fw-500">Automation System</h3>
             </div>
             <hr />
-            <div className="d-flex flex-wrap">
+            <div className="d-flex flex-wrap rg-1">
                 <div className="col-lg-4 col-xl-3 col-md-6 col-12">
                     <div className={`w-100 multi-input-hold ${isNewEntry.pageName ? 'new' : ''}`}>
                         <label>Page Name</label>
@@ -259,10 +266,18 @@ export default function DashboardHome() {
                         </div>
                     </div>
                 </div>
+
+                <div className="col-lg-4 col-xl-3 col-md-6 col-12">
+                    <div>
+                        <button className="mt-auto btn btn-primary" onClick={() => {
+                            if(columnList.length) setColumnName(columnList[0]);
+                        }}>Add A Column</button>
+                    </div>
+                </div>
             </div>
             <br />
 
-            <div className="border p-2">
+            <div className={`border p-2 ${columnName || editingRow ? '' : 'hide'}`}>
                 <h6>Dataset Info</h6>
                 <div className="d-flex flex-wrap rg-1">
                     <div className="col-lg-4 col-xl-3 col-md-6">
@@ -449,9 +464,12 @@ export default function DashboardHome() {
                     <div className="loader"></div>
                 </div> : <></>
             }
-            <div style={{ overflowX: 'scroll' }}>
-                {designerColumns.length ? <DesignerTable rows={designerColumns} onRowDelete={onRowDelete} onRowEdit={onRowEdit} /> : <div className='text-danger text-center'>No Data to Show</div>}
-            </div>
+            {
+                showTable ? 
+                <div style={{ overflowX: 'scroll' }}>
+                    {designerColumns.length ? <DesignerTable rows={designerColumns} onRowDelete={onRowDelete} onRowEdit={onRowEdit} /> : <div className='text-danger text-center'>No Data to Show</div>}
+                </div> : <></>
+            }
         </div>
     )
 }

@@ -1,5 +1,5 @@
-// export const baseUrl = "http://35.208.65.24:5000";
-export const baseUrl = "http://localhost:5000";
+export const baseUrl = "http://35.208.65.24:5000";
+// export const baseUrl = "http://localhost:5000";
 
 export const validCrudDataTypes = [
     'STRING', 'NUMBER', 'BOOLEAN', 'DATE', 

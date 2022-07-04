@@ -34,7 +34,7 @@ export default function DesignerTable({ rows, onRowEdit, onRowDelete, hideAction
                             <td>{r.label}</td>
                             <td>{r.applyFilter.toString()}</td>
                             <td>{r.displayMode}</td>
-                            <td>{r.displayLength}</td>
+                            <td>{r.displayLength || 'Unspecified'}</td>
                             <td>{r.isMaster ? 'Master' : 'Detail'}</td>
                             <td>{r.isJoinColumn.toString()}</td>
                             <td>{r.refTable || 'Not Applicable'}</td>

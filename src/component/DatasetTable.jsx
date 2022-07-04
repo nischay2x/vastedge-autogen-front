@@ -28,7 +28,7 @@ export default function DatasetTable({ rows, onRowDelete, onRowEdit }) {
                             <td>{r.tableName}</td>
                             <td>{r.columnName}</td>
                             <td>{r.dataType}</td>
-                            <td>{r.maxLength}</td>
+                            <td>{r.maxLength || 'Unspecified'}</td>
                             <td>{r.allowNull.toString()}</td>
                             <td>{r.keepUnique.toString()}</td>
                             {/* <td>{r.isMaster? 'Master' : 'Detail'}</td>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getDesignerColumnsByTableName, getDistinctPages, getTables } from '../api';
+import { getDesignerColumns, getDesignerColumnsByTableName, getDistinctPages, getTables } from '../api';
 import DesignerTable from '../component/DesignerTable';
 
 function errorHandler({ response }) {
@@ -26,9 +26,15 @@ export default function Pages() {
 
   useEffect(() => {
     if (!currentPage) return;
-    getTables(currentPage).then(res => {
-      setTables(res.data.data);
-    }).catch(errorHandler)
+    getDesignerColumns(currentPage).then(res => {
+      let data = res.data.data;
+      setDesignerColumns(data);
+      let tableNames = [];
+      data.forEach(d => {
+        if(!tableNames.includes(d.tableName)) tableNames.push(d.tableName)
+      })
+      setTables(tableNames);
+    }).catch(errorHandler);
   }, [currentPage])
 
   useEffect(() => {
@@ -47,6 +53,10 @@ export default function Pages() {
     }).catch(errorHandler);
   }, []);
 
+  const showAllInPage = () => {
+    
+  }
+
   const onRowDelete = () => {}
   const onRowEdit = () => {}
 
@@ -58,15 +68,15 @@ export default function Pages() {
       <hr />
 
       <div className='d-flex justify-content-between pb-2'>
-        <h6>Tables List</h6>
-        <button className="btn btn-sm btn-primary"
+        <h6>Pages List</h6>
+        {/* <button className="btn btn-sm btn-primary"
           onClick={() => {
             // setCreatingNewTable(true);
             // setCreatingNewColumn(false);
             // setEditingRow(false);
             // setNewTableData(prev => ({ ...prev, tableName: "" }))
           }}
-        >Create New Table</button>
+        >Create New Table</button> */}
       </div>
 
       <div className='d-flex cg-1'>

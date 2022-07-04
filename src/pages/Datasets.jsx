@@ -118,7 +118,7 @@ export default function Datasets() {
             <hr />
 
             <div className='d-flex justify-content-between pb-2'>
-                <h6>Tables List</h6>
+                <h6>Dataset List</h6>
                 <button className="btn btn-sm btn-primary"
                     onClick={() => { 
                         setCreatingNewTable(true); 
@@ -278,7 +278,7 @@ export default function Datasets() {
                                 setCreatingNewTable(false);
                                 setEditingRow(false);
                             }}
-                        >Add A Column to this Table</button>
+                        >Add A Column</button>
                     </div>
                     <hr />
                     <div className='d-flex pb-4 justify-content-center'>
