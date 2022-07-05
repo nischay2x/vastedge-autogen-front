@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import DesignerTable from '../component/DesignerTable.jsx';
 import { 
     getDesignerColumnsByTableName, getCrudColumnsByTableName, 
-    getDistinctPages, getTables, postNewCrudColumn, postNewDesignerColumn, editDesignerColumn, deleteDesignerColumn, getJoinableColumnsByTableName 
+    getDistinctPages, getTables, postNewDesignerColumn, editDesignerColumn, 
+    deleteDesignerColumn, getJoinableColumnsByTableName, getDesignerColumns 
 } from "../api.js";
 import { validCrudDataTypes, validInputFieldTypes } from "../config.js";
 
@@ -86,7 +87,6 @@ export default function DashboardHome() {
 
     useEffect(() => {
         if(!tableName) return;
-        getDesignerColumnsByTableName(tableName).then(applyDesignerColumnResponse).catch(errorHandler)
         
         setIsLoading(prev => ({ ...prev, columnName: true }));
         getCrudColumnsByTableName(tableName).then(res => {
@@ -100,6 +100,18 @@ export default function DashboardHome() {
             setIsLoading(prev => ({ ...prev, columnName: false }))
         })
     }, [tableName])
+
+    useEffect(() => {
+        if((tableName && pageName) || (tableName && !pageName)){
+            getDesignerColumnsByTableName(tableName, pageName).then(applyDesignerColumnResponse).catch(errorHandler)
+        } 
+        else if (!tableName && pageName) {
+            getDesignerColumns(pageName).then(res => {
+                let data = res.data.data;
+                setDesignerColumns(data);
+            }).catch(errorHandler);
+        }
+    }, [tableName, pageName]);
 
     useEffect(() => {
         if(!columnName) return;
@@ -158,13 +170,15 @@ export default function DashboardHome() {
                 const newDesData = res.data.data;
                 setDesignerColumns(prev => [...prev, newDesData]);
                 alert("Data Inserted");
+                handleDesignerFormCancel();
             }).catch(errorHandler)
         } else {
             editDesignerColumn(designerColumns[editingRowIndex].id, {
                 ...designerColumnData, columnName
             }).then(res => {
                 getDesignerColumnsByTableName(tableName).then(applyDesignerColumnResponse).catch(errorHandler);
-                alert(res.data.msg)
+                alert(res.data.msg);
+                handleDesignerFormCancel();
             }).catch(errorHandler)
         }
     }
@@ -269,9 +283,12 @@ export default function DashboardHome() {
 
                 <div className="col-lg-4 col-xl-3 col-md-6 col-12">
                     <div>
-                        <button className="mt-auto btn btn-primary" onClick={() => {
-                            if(columnList.length) setColumnName(columnList[0]);
-                        }}>Add A Column</button>
+                        {
+                            tableName ? 
+                            <button className="mt-auto btn btn-primary" onClick={() => {
+                                if(columnList.length) setColumnName(columnList[0]);
+                            }}>Add A Column</button> : <></>
+                        }
                     </div>
                 </div>
             </div>
