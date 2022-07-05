@@ -113,12 +113,12 @@ export default function Datasets() {
     return (
         <div className="container-fluid py-3">
             <div>
-                <h3>Dataset Tables</h3>
+                <h3>Datasets</h3>
             </div>
             <hr />
 
             <div className='d-flex justify-content-between pb-2'>
-                <h6>Dataset List</h6>
+                <h6>Datasets</h6>
                 <button className="btn btn-sm btn-primary"
                     onClick={() => { 
                         setCreatingNewTable(true); 
