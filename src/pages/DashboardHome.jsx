@@ -460,7 +460,7 @@ export default function DashboardHome() {
             </div>
             <br />
             {
-                isLoading.columnName && pageName ? <div className="d-flex justify-content-center py-2">
+                isLoading.columnName && tableName ? <div className="d-flex justify-content-center py-2">
                     <div className="loader"></div>
                 </div> : <></>
             }
